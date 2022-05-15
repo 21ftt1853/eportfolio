@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>wk10-e-c</title>
+  <style>
+    body{display: grid; width: 80%;margin: 0 auto;grid-template-columns:repeat(5, 2fr) ;grid-auto-rows: 3.5em;}
+
+            /*no additional css is required*/
+
+  </style>
+</head>
+
+
+<!-- do not insert additional id attributes to any element -->
+<!-- do not remove any inline styles -->
+
+<body>
+<h3 style="grid-column: 1/span 5">Online grocery order</h3>
+<p style="grid-column: 1/span 5">Tick the checkboxes to show items</p>
+<div><input type="checkbox" name="items" value="fruits" onclick="myFunction()">fruits</div>
+<div><input type="checkbox" name="items" value="fish" onclick="myFunction()">fish</div>
+<div><input type="checkbox" name="items" value="vegetables" onclick="myFunction()">vegetables</div>
+<div><input type="checkbox" name="items" value="beef" onclick="myFunction()">beef</div>
+<div></div>
+
+
+<div>Item</div>
+<div>base price per 100gm</div>
+<div>quality</div>
+<div>quantity</div>
+<div>total</div>
+
+<div class="fruits allitems" >Durian Musang King</div>
+<div class="fruits allitems" >45.67</div>
+<div class="fruits allitems" >
+  <input type="radio" name="fruitquality" value="normal" onclick="sliders()" required>normal
+  <input type="radio" name="fruitquality" value="premium" onclick="sliders()" required>premium
+</div>
+<div class="fruits allitems" ><input type="range" class="sliders" name="fruitqty" value="100" min="100" max="1000" id="fruitqty" onchange="sliders(this.value)"><span id="fruitqtyvalue"></span></div>
+<div class="fruits allitems" ><!-- (result of base price*quantity) + normal/premium percentage. using id attribute not allowed--></div>
+
+<div class="fishes allitems" >Alaskan Bluefin Tuna</div>
+<div class="fishes allitems" >67.89</div>
+<div class="fishes allitems" >
+  <input type="radio" name="fishquality" value="normal" onclick="sliders1()" required>normal
+  <input type="radio" name="fishquality" value="premium" onclick="sliders1()" required>premium
+</div>
+<div class="fishes allitems" ><input type="range" class="sliders" name="fishqty" value="100" min="100" max="1000" id="fishqty" onchange="sliders1()"> <span id="fishqtyvalue"></span></div>
+<div class="fishes allitems" ><!-- (result of base price*quantity) + normal/premium percentage. using id attribute not allowed--></div>
+
+
+<div class="vegetables allitems" >Black truffle</div>
+<div class="vegetables allitems" >79.33</div>
+<div class="vegetables allitems">
+  <input type="radio" name="vegetablesquality" value="normal" onclick="sliders2()" required>normal
+  <input type="radio" name="vegetablesquality" value="premium" onclick="sliders2()" required>premium
+</div>
+<div class="vegetables allitems" ><input type="range" class="sliders" name="fruitqty" value="100" min="100" max="1000" id="vegetablesqty" onchange="sliders2()"> <span id="vegetablesqtyvalue"></span></div>
+<div class="vegetables allitems" ><!-- (result of base price*quantity) + normal/premium percentage. using id attribute not allowed--></div>
+
+
+<div class="meats allitems" >wagyu steak</div>
+<div class="meats allitems" >97.55</div>
+<div class="meats allitems" >
+  <input type="radio" name="meatquality" value="normal" onclick="sliders3()" required>normal
+  <input type="radio" name="meatquality" value="premium" onclick="sliders3()" required>premium
+</div>
+<div class="meats allitems" ><input type="range" class="sliders" name="meatqty" value="100" min="100" max="1000" id="meatqty" onchange="sliders3()"> <span id="meatqtyvalue"></span></div>
+<div class="meats allitems" ><!-- (result of base price*quantity) + normal/premium percentage. using id attribute not allowed--></div>
+
+
+<div style="grid-column: 1/span 4; " class="thirdlastrow allitems" >
+  <select name="membership" id="membership" >
+    <option value="0">select membership</option>
+    <option value="non-member">non member</option>
+    <option value="member">member</option>
+</select>
+
+</div>
+
+<div class="thirdlastrow allitems" ><button onclick="mmbership()">finalize</button></div>
+<div style="grid-column: 1/span 4;" class="allitems" >Total purchases</div>
+<div id="grandtotal" class="allitems thirdlastrow" ></div>
+
+
+<div class="memberonly">With your membership, you pay </div><div id="finaltotal"  style="grid-column: 2/span 2"  class="memberonly"></div><div  class="memberonly">You saved </div><div id="saving"  class="memberonly"></div>
+<div class="memberonly">From this purchases, points earned: </div><div id="loyaltypoints"  style="grid-column: 2/span 4"  class="memberonly"></div>
+
+
+<script>
+
+// Hide All DIV Content
+
+ for(var i = 0; i <=20; i++){
+  document.getElementsByClassName('allitems')[i].style.display = 'none';
+ }
+
+  for(var o = 20; o <=22; o++){
+  document.getElementsByClassName('allitems')[o].style.display = 'none';
+  }
+
+  for(var p = 0; p <=5; p++){
+  document.getElementsByClassName('memberonly')[p].style.display = 'none';
+  }
+
+// Checkbox tick\untick
+
+function myFunction() {
+  var checkBox = document.getElementsByName('items');
+
+  if (checkBox[0].checked){
+    for(var ft = 0; ft<=4; ft++){
+     document.getElementsByClassName('allitems')[ft].style.display = 'block';
+
+    for(var w = 20; w<=22; w++){
+     document.getElementsByClassName('allitems')[w].style.display = 'block';
+     }
+
+    for(var g = 0; g<=2; g++){
+     document.getElementsByClassName('thirdlastrow')[g].style.display = 'block';
+     }
+
+     document.getElementById("fruitqty").disabled = true; 
+     var fslider = document.getElementById("fruitqty").value;
+     document.getElementById("fruitqtyvalue").innerHTML = fslider;
+     
+   }
+  }else{
+    for(var ft = 0; ft<=4; ft++){
+
+     document.getElementsByClassName('allitems')[ft].style.display = 'none';
+     document.getElementsByClassName('allitems')[20].style.display = 'none';
+     document.getElementsByClassName('allitems')[22].style.display = 'none';
+
+    for(var w = 0; w<=2; w++){
+     document.getElementsByClassName('thirdlastrow')[w].style.display = 'none';
+     }
+
+    for(var c = 0; c<=5; c++){
+     document.getElementsByClassName('memberonly')[c].style.display = 'none';
+     }
+
+     document.getElementById("fruitqty").disabled = true;
+     document.getElementsByClassName("fruits")[4].innerHTML = ""; 
+
+    }
+  }
+
+  if (checkBox[1].checked){
+   for(var ft = 5; ft<=9; ft++)
+    {
+     document.getElementsByClassName('allitems')[ft].style.display = 'block';
+     document.getElementsByClassName('allitems')[22].style.display = 'block'; 
+
+    for(var g = 0; g<=2; g++){
+     document.getElementsByClassName('thirdlastrow')[g].style.display = 'block';
+     }
+      
+     document.getElementById("fishqty").disabled = true; }
+  }else{
+     for(var ft = 5; ft<=9; ft++){
+      document.getElementsByClassName('allitems')[ft].style.display = 'none';
+      document.getElementById("fishqty").disabled = true; 
+      document.getElementsByClassName("fishes")[4].innerHTML = "";
+     }
+  } 
+  
+  if (checkBox[2].checked){
+    for(var ft = 10; ft<=14; ft++){
+     document.getElementsByClassName('allitems')[ft].style.display = 'block';
+     document.getElementsByClassName('allitems')[22].style.display = 'block';
+     document.getElementsByClassName('allitems')[20].style.display = 'block';
+
+    for(var g = 0; g<=2; g++){
+     document.getElementsByClassName('thirdlastrow')[g].style.display = 'block';
+     }
+
+     document.getElementById("vegetablesqty").disabled = true; 
+   }
+  }else{
+     for(var ft = 10; ft<=14; ft++){
+      document.getElementsByClassName('allitems')[ft].style.display = 'none';
+      document.getElementById("vegetablesqty").disabled = true; 
+      document.getElementsByClassName("vegetables")[4].innerHTML = "";
+    }
+  }
+
+  if (checkBox[3].checked){
+    for(var ft = 15; ft<=20; ft++){
+     document.getElementsByClassName('allitems')[ft].style.display = 'block';
+     document.getElementsByClassName('allitems')[20].style.display = 'block';
+     document.getElementsByClassName('allitems')[22].style.display = 'block';
+
+    for(var g = 0; g<=2; g++){
+     document.getElementsByClassName('thirdlastrow')[g].style.display = 'block';
+     }
+
+     document.getElementById("meatqty").disabled = true; 
+   }
+  } 
+  else{
+     for(var ft = 15; ft<20; ft++)
+     {
+      document.getElementsByClassName('allitems')[ft].style.display = 'none';
+      document.getElementById("fruitqty").disabled = true;
+      document.getElementById("fishqty").disabled = true;
+      document.getElementById("vegetablesqty").disabled = true; 
+      document.getElementById("meatqty").disabled = true;
+      document.getElementsByClassName("meats")[4].innerHTML = "";
+     }
+     document.getElementById("fruitqty").value = 100;
+     document.getElementById("fishqty").value = 100;
+     document.getElementById("vegetablesqty").value = 100;
+     document.getElementById("meatqty").value = 100;
+     }
+  } 
+
+//slider fruit
+function sliders(){
+  
+  var fruits2 = document.getElementsByName("fruitquality");
+
+  var fslider = document.getElementById("fruitqty").value;
+  document.getElementById("fruitqtyvalue").innerHTML = fslider;
+  var normal = document.getElementsByName("fruitquality")[0];
+  var prem = document.getElementsByName("fruitquality")[1];
+
+  //calc fruit for premium and normal
+
+  if(normal.checked){
+    var totalqty = (document.getElementById("fruitqtyvalue").innerHTML * 45.67 / 100);
+    var total = (totalqty + ((2.5/100)*(totalqty)) );
+    document.getElementsByClassName("fruits")[4].innerHTML = parseFloat(total.toPrecision(5));
+  } 
+  else{
+    var totalqty = (document.getElementById("fruitqtyvalue").innerHTML * 45.67 / 100);
+    var total = (totalqty + ((4.3/100 )*(totalqty)) );
+    document.getElementsByClassName("fruits")[4].innerHTML = parseFloat(total.toPrecision(5));
+  }
+  
+ // end of calc
+
+  if(fruits2[0].checked){
+    document.getElementById("fruitqty").disabled = false; 
+  }
+
+  else if(fruits2[1].checked){
+    document.getElementById("fruitqty").disabled = false; 
+  }
+
+  else if(fruits2[0].checked == false){
+    document.getElementById("fruitqty").disabled = true; 
+  }
+
+  else {
+    document.getElementById("fruitqty").disabled = true; 
+
+  }
+}
+
+// end of slider fruit
+
+
+
+// slider fish
+function sliders1(){
+  
+  var fish2 = document.getElementsByName("fishquality");
+
+  var fishslider = document.getElementById("fishqty").value;
+  document.getElementById("fishqtyvalue").innerHTML = fishslider;
+   var normal1 = document.getElementsByName("fishquality")[0];
+  var prem1 = document.getElementsByName("fishquality")[1];
+
+  //calc fish for premium and normal
+
+  if(normal1.checked){
+    var totalqty1 = (document.getElementById("fishqtyvalue").innerHTML * 67.89 / 100);
+    var total1 = (totalqty1 + ((2.5/100)*(totalqty1)) );
+    document.getElementsByClassName("fishes")[4].innerHTML = parseFloat(total1.toPrecision(5));
+  } 
+  else{
+    var totalqty1 = (document.getElementById("fishqtyvalue").innerHTML * 67.89 / 100);
+    var total1 = (totalqty1 + ((4.3/100 )*(totalqty1)) );
+    document.getElementsByClassName("fishes")[4].innerHTML = parseFloat(total1.toPrecision(5));}
+  
+  //end of calc
+
+  if(fish2[0].checked){
+    document.getElementById("fishqty").disabled = false; 
+  }
+
+  else if(fish2[1].checked){
+    document.getElementById("fishqty").disabled = false; 
+  }else {
+    document.getElementById("fishqty").disabled = true; 
+  }
+}
+
+// end of slider fish
+
+
+// slider vegetables
+
+function sliders2(){
+  
+  var vegetables2 = document.getElementsByName("vegetablesquality");
+  var vegslider = document.getElementById("vegetablesqty").value;
+  document.getElementById("vegetablesqtyvalue").innerHTML = vegslider;
+  var normal2 = document.getElementsByName("vegetablesquality")[0];
+  var prem2 = document.getElementsByName("vegetablesquality")[1];
+
+  //calc vegetables for premium and normal
+
+  if(normal2.checked){
+  var totalqty2 = (document.getElementById("vegetablesqtyvalue").innerHTML * 79.33 / 100);
+  var total2 = (totalqty2 + ((2.5/100)*(totalqty2)) );
+  document.getElementsByClassName("vegetables")[4].innerHTML = parseFloat(total2.toPrecision(5));
+  } 
+  else{
+    var totalqty2 = (document.getElementById("vegetablesqtyvalue").innerHTML * 79.33 / 100);
+    var total2 = (totalqty2 + ((4.3/100 )*(totalqty2)) );
+    document.getElementsByClassName("vegetables")[4].innerHTML = parseFloat(total2.toPrecision(5));}
+
+    //end of calc
+
+  if(vegetables2[0].checked){
+    document.getElementById("vegetablesqty").disabled = false; 
+  }
+
+  else if(vegetables2[1].checked){
+    document.getElementById("vegetablesqty").disabled = false; 
+  }else {
+    document.getElementById("vegetablesqty").disabled = true; 
+  }
+}
+
+// end of slider vegetable
+
+
+// beef slider 
+
+function sliders3(){
+  
+  var meat2 = document.getElementsByName("meatquality");
+  var meatslider = document.getElementById("meatqty").value;
+  document.getElementById("meatqtyvalue").innerHTML = meatslider;
+  var normal3 = document.getElementsByName("meatquality")[0];
+  var prem3 = document.getElementsByName("meatquality")[1];
+
+  //calc beef for premium and normal
+
+  if(normal3.checked){
+  var totalqty3 = (document.getElementById("meatqtyvalue").innerHTML * 97.55 / 100);
+  var total3 = (totalqty3 + ((2.5/100)*(totalqty3)) );
+  document.getElementsByClassName("meats")[4].innerHTML = parseFloat(total3.toPrecision(5));
+  } 
+  else{
+    var totalqty3 = (document.getElementById("meatqtyvalue").innerHTML * 97.55 / 100);
+    var total3 = (totalqty3 + ((4.3/100 )*(totalqty3)) );
+    document.getElementsByClassName("meats")[4].innerHTML = parseFloat(total3.toPrecision(5));}
+
+    //end of calc
+
+  if(meat2[0].checked){
+    document.getElementById("meatqty").disabled = false; 
+  }
+
+  else if(meat2[1].checked){
+    document.getElementById("meatqty").disabled = false; 
+  }else {
+    document.getElementById("meatqty").disabled = true; 
+  }
+}
+
+// end of slider fish
+
+
+
+// this is for member or non 
+
+function mmbership(){
+  var selectedmm = document.getElementById('membership');
+
+
+  if (selectedmm.selectedIndex==0){
+
+    document.getElementsByClassName('memberonly')[0].style.display = 'none';
+    document.getElementsByClassName('memberonly')[1].style.display = 'none';
+    document.getElementsByClassName('memberonly')[2].style.display = 'none';
+    document.getElementsByClassName('memberonly')[3].style.display = 'none';
+    document.getElementsByClassName('memberonly')[4].style.display = 'none';
+    document.getElementsByClassName('memberonly')[5].style.display = 'none';
+    document.getElementById('grandtotal').style.display = 'none';
+  }
+
+  else if (selectedmm.selectedIndex==1){
+
+    document.getElementsByClassName('memberonly')[0].style.display = 'none';
+    document.getElementsByClassName('memberonly')[1].style.display = 'none';
+    document.getElementsByClassName('memberonly')[2].style.display = 'none';
+    document.getElementsByClassName('memberonly')[3].style.display = 'none';
+    document.getElementsByClassName('memberonly')[4].style.display = 'none';
+    document.getElementsByClassName('memberonly')[5].style.display = 'none';
+
+    var fruits2 = document.getElementsByName("fruitquality");
+
+    var fslider = document.getElementById("fruitqty").value;
+    document.getElementById("fruitqtyvalue").innerHTML = fslider;
+    var normal = document.getElementsByName("fruitquality")[0];
+    var prem = document.getElementsByName("fruitquality")[1];
+
+    if(normal.checked){
+      var totalqty = (document.getElementById("fruitqtyvalue").innerHTML * 45.67 / 100);
+      var total = (totalqty + ((2.5/100)*(totalqty)) );
+    
+
+      document.getElementById('grandtotal').innerHTML = parseFloat(total.toPrecision(5));}
+
+    else if(prem.checked){
+      var totalqty = (document.getElementById("fruitqtyvalue").innerHTML * 45.67 / 100);
+      var total = (totalqty + ((4.3/100 )*(totalqty)) );
+      document.getElementById('grandtotal').innerHTML = parseFloat(total.toPrecision(5));}
+
+    var fish2 = document.getElementsByName("fishquality");
+
+    var fishslider = document.getElementById("fishqty").value;
+    document.getElementById("fishqtyvalue").innerHTML = fishslider;
+    var normal1 = document.getElementsByName("fishquality")[0];
+    var prem1 = document.getElementsByName("fishquality")[1];
+
+    if(normal1.checked){
+      var totalqty1 = (document.getElementById("fishqtyvalue").innerHTML * 67.89 / 100);
+      var total1 = (totalqty1 + ((2.5/100)*(totalqty1)) );
+  
+      document.getElementById('grandtotal').innerHTML = parseFloat(total1.toPrecision(5));
+    } 
+    else if(prem1.checked){
+      var totalqty1 = (document.getElementById("fishqtyvalue").innerHTML * 67.89 / 100);
+      var total1 = (totalqty1 + ((4.3/100 )*(totalqty1)) );
+      
+      document.getElementById('grandtotal').innerHTML = parseFloat(total1.toPrecision(5));}
+
+
+    var vegetables2 = document.getElementsByName("vegetablesquality");
+    var vegslider = document.getElementById("vegetablesqty").value;
+    document.getElementById("vegetablesqtyvalue").innerHTML = vegslider;
+    var normal2 = document.getElementsByName("vegetablesquality")[0];
+    var prem2 = document.getElementsByName("vegetablesquality")[1];
+
+    if(normal2.checked){
+      var totalqty2 = (document.getElementById("vegetablesqtyvalue").innerHTML * 79.33 / 100);
+      var total2 = (totalqty2 + ((2.5/100)*(totalqty2)) );
+      document.getElementById('grandtotal').innerHTML = parseFloat(total2.toPrecision(5));
+    } 
+    else if(prem2.checked){
+      var totalqty2 = (document.getElementById("vegetablesqtyvalue").innerHTML * 79.33 / 100);
+      var total2 = (totalqty2 + ((4.3/100 )*(totalqty2)) );
+      document.getElementById('grandtotal').innerHTML = parseFloat(total2.toPrecision(5));}
+
+    var meat2 = document.getElementsByName("meatquality");
+    var meatslider = document.getElementById("meatqty").value;
+    document.getElementById("meatqtyvalue").innerHTML = meatslider;
+    var normal3 = document.getElementsByName("meatquality")[0];
+    var prem3 = document.getElementsByName("meatquality")[1];
+
+    if(normal3.checked){
+      var totalqty3 = (document.getElementById("meatqtyvalue").innerHTML * 97.55 / 100);
+      var total3 = (totalqty3 + ((2.5/100)*(totalqty3)) );
+      document.getElementById('grandtotal').innerHTML = parseFloat(total3.toPrecision(5));
+    } 
+    else if (prem3.checked){
+      var totalqty3 = (document.getElementById("meatqtyvalue").innerHTML * 97.55 / 100);
+      var total3 = (totalqty3 + ((4.3/100 )*(totalqty3)) );
+      document.getElementById('grandtotal').innerHTML = parseFloat(total3.toPrecision(5));
+    }
+
+   if(normal.checked && normal1.checked && normal2.checked && normal3.checked || prem.checked && prem1.checked && prem2.checked && prem3.checked){
+    var alltotal = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal.toPrecision(5));
+  }
+
+  else if(normal.checked && normal1.checked && normal2.checked && prem3.checked || normal.checked && normal1.checked && prem2.checked && normal3.checked){
+    var alltotal1 = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal1.toPrecision(5));
+  }
+
+  else if(normal.checked && prem1.checked && normal2.checked && prem3.checked || prem.checked && prem1.checked && prem2.checked && normal3.checked){
+    var alltotal2 = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal2.toPrecision(5));
+  }
+
+  else if(normal.checked && prem1.checked && prem2.checked && normal3.checked || prem.checked && normal1.checked && normal2.checked && prem3.checked){
+    var alltotal3 = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal3.toPrecision(5));
+  }
+
+  else if(prem.checked && normal1.checked && prem2.checked && prem3.checked || prem.checked && normal1.checked && normal2.checked && prem3.checked){
+    var alltotal4 = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal4.toPrecision(5));
+  }
+
+  else if(normal.checked && normal1.checked && prem2.checked && prem3.checked || prem.checked && prem1.checked && normal2.checked && normal3.checked){
+    var alltotal42 = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal1.toPrecision(5));
+  }
+
+
+  //normal & premium
+  else if(normal.checked && normal1.checked){
+    var alltotal5 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal5.toPrecision(5));
+  }
+
+  else if(prem.checked && prem1.checked){
+    var alltotal6 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal6.toPrecision(5));
+  }
+
+  else if(normal.checked && normal2.checked || prem.checked && prem2.checked){
+    var alltotal7 = (total + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal7.toPrecision(5));
+  }
+
+  else if(prem.checked && prem1.checked){
+    var alltotal8 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal8.toPrecision(5));
+  }
+
+  else if(normal.checked && normal3.checked){
+    var alltotal9 = (total + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal9.toPrecision(5));
+  }
+
+  else if(prem.checked && prem1.checked){
+    var alltotal10 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal10.toPrecision(5));
+  }
+  else if(normal2.checked && normal1.checked){
+    var alltotal11 = (total2 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal11.toPrecision(5));
+  }
+
+  else if(prem.checked && prem1.checked){
+    var alltotal12 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal12.toPrecision(5));
+  }
+  else if(normal2.checked && normal3.checked){
+    var alltotal13 = (total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal13.toPrecision(5));
+  }
+
+  else if(prem2.checked && prem3.checked){
+    var alltotal14 = (total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal14.toPrecision(5));
+  }
+
+  else if(normal3.checked && normal1.checked || prem3.checked && prem1.checked){
+    var alltotal15 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal15.toPrecision(5));
+  }
+
+  else if(prem3.checked && prem1.checked){
+    var alltotal16 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal16.toPrecision(5));
+  }
+
+  //choose premium and normal
+  else if(prem.checked && normal1.checked){
+    var alltotal17 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal17.toPrecision(5));
+  }
+
+  else if(normal.checked && prem1.checked){
+    var alltotal18 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal18.toPrecision(5));
+  }
+
+  else if(normal3.checked && normal1.checked){
+    var alltotal19 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal19.toPrecision(5));
+  }
+
+  else if(prem3.checked && prem1.checked){
+    var alltotal20 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal20.toPrecision(5));
+  }
+
+  else if(prem.checked && normal1.checked){
+    var alltotal21 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal21.toPrecision(5));
+  }
+
+  else if(normal.checked && prem1.checked){
+    var alltotal22 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal22.toPrecision(5));
+  }
+
+  else if(prem.checked && normal2.checked){
+    var alltotal23 = (total + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal23.toPrecision(5));
+  }
+
+  else if(normal.checked && prem2.checked){
+    var alltotal24 = (total + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal24.toPrecision(5));
+  }
+
+  else if(prem.checked && normal3.checked){
+    var alltotal25 = (total + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal25.toPrecision(5));
+  }
+
+  else if(normal.checked && prem3.checked){
+    var alltotal26 = (total + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal26.toPrecision(5));
+  }
+
+  else if(prem1.checked && normal2.checked){
+    var alltotal27 = (total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal27.toPrecision(5));
+  }
+
+  else if(normal1.checked && prem2.checked){
+    var alltotal28 = (total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal28.toPrecision(5));
+  }
+
+  else if(prem1.checked && normal3.checked){
+    var alltotal29 = (total1 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal29.toPrecision(5));
+  }
+
+  else if(normal1.checked && prem3.checked){
+    var alltotal30 = (total1 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal30.toPrecision(5));
+  }
+
+  else if(prem2.checked && normal1.checked){
+    var alltotal31 = (total2 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal31.toPrecision(5));
+  }
+
+  else if(normal2.checked && prem1.checked){
+    var alltotal32 = (total2 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal32.toPrecision(5));
+  }
+
+  else if(prem2.checked && normal3.checked){
+    var alltotal33 = (total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal33.toPrecision(5));
+  }
+
+  else if(normal2.checked && prem3.checked){
+    var alltotal34 = (total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal34.toPrecision(5));
+  }
+
+  else if(prem3.checked && normal1.checked){
+    var alltotal35 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal35.toPrecision(5));
+  }
+
+  else if(normal3.checked && prem1.checked){
+    var alltotal36 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal36.toPrecision(5));
+  }
+
+  else if(prem3.checked && normal2.checked){
+    var alltotal37 = (total3 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal37.toPrecision(5));
+  }
+
+  else if(normal3.checked && prem2.checked){
+    var alltotal38 = (total3 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal38.toPrecision(5));
+  }
+
+
+  //normal & normal & normal
+  else if(normal.checked && normal1.checked && normal2.checked){
+    var alltotal39 = (total + total1 +total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal39.toPrecision(5));
+  }
+
+  else if(normal.checked && normal1.checked && normal3.checked){
+    var alltotal40 = (total + total1 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal40.toPrecision(5));
+  }
+
+  else if(normal.checked && normal2.checked && normal3.checked){
+    var alltotal41 = (total + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal41.toPrecision(5));
+  }
+
+  else if(normal1.checked && normal2.checked && normal3.checked){
+    var alltotal42 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal42.toPrecision(5));
+  }
+
+  //premium & premium & premium
+
+  else if(prem.checked && prem1.checked && prem2.checked){
+    var alltotal43 = (total + total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal43.toPrecision(5));
+  }
+
+  else if(prem.checked && prem1.checked && prem3.checked){
+    var alltotal45 = (total + total1 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal45.toPrecision(5));
+  }
+
+  else if(prem.checked && prem2.checked && prem3.checked){
+    var alltotal46 = (total + total2 +total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal46.toPrecision(5));
+  }
+
+  else if(prem1.checked && prem2.checked && prem3.checked){
+    var alltotal47 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal47.toPrecision(5));
+  }
+
+  //normal & premium & normal [0,1,2]
+  else if(normal.checked && prem1.checked && normal2.checked){
+    var alltotal48 = (total + total1 +total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal48.toPrecision(5));
+  }
+
+  //normal & normal & premium
+  else if(normal.checked && normal1.checked && prem2.checked){
+    var alltotal49 = (total + total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal49.toPrecision(5));
+  }
+
+  // premium & normal & premium
+  else if(prem.checked && normal1.checked && prem2.checked){
+    var alltotal50 = (total + total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal50.toPrecision(5));
+  }
+
+  //premium & normal & normal
+  else if(prem.checked && normal1.checked && normal2.checked){
+    var alltotal51 = (total + total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal51.toPrecision(5));
+  }
+
+  //premium & premium & normal
+  else if(prem.checked && prem1.checked && normal2.checked){
+    var alltotal52 = (total + total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal52.toPrecision(5));
+  }
+
+  //normal & normal & premium [0,2,3]
+  else if(normal.checked && normal2.checked && prem3.checked){
+    var alltotal53 = (total + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal53.toPrecision(5));
+  }
+
+  else if(normal.checked && prem2.checked && normal3.checked){
+    var alltotal54 = (total + total2 +total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal54.toPrecision(5));
+  }
+
+  else if(prem.checked && prem2.checked && normal3.checked){
+    var alltotal55 = (total + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal55.toPrecision(5));
+  }
+
+  else if(prem.checked && normal2.checked && normal3.checked){
+    var alltotal56 = (total + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal56.toPrecision(5));
+  }
+
+  else if(prem.checked && normal1.checked && normal2.checked){
+    var alltotal57 = (total + total1 +total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal57.toPrecision(5));
+  }
+
+  //normal & normal & premium [1,2,3]
+  else if(normal1.checked && normal2.checked && prem3.checked){
+    var alltotal58 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal58.toPrecision(5));
+  }
+
+  else if(normal1.checked && prem2.checked && normal3.checked){
+    var alltotal59 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal59.toPrecision(5));
+  }
+
+  else if(prem1.checked && prem2.checked && normal3.checked){
+    var alltotal60 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal60.toPrecision(5));
+  }
+
+  else if(prem1.checked && normal2.checked && normal3.checked){
+    var alltotal61 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal61.toPrecision(5));
+  }
+
+     document.getElementById('grandtotal').style.display = 'block';
+
+
+  }
+
+
+
+
+
+  else if (selectedmm.selectedIndex==2){
+    
+
+    document.getElementsByClassName('memberonly')[0].style.display = 'block';
+  document.getElementsByClassName('memberonly')[1].style.display = 'block';
+  document.getElementsByClassName('memberonly')[2].style.display = 'block';
+  document.getElementsByClassName('memberonly')[3].style.display = 'block';
+  document.getElementsByClassName('memberonly')[4].style.display = 'block';
+  document.getElementsByClassName('memberonly')[5].style.display = 'block';
+   document.getElementById('grandtotal').style.display = 'block';
+
+    var fruits2 = document.getElementsByName("fruitquality");
+
+  var fslider = document.getElementById("fruitqty").value;
+  document.getElementById("fruitqtyvalue").innerHTML = fslider;
+  var normal = document.getElementsByName("fruitquality")[0];
+  var prem = document.getElementsByName("fruitquality")[1];
+
+  if(normal.checked){
+  var totalqty = (document.getElementById("fruitqtyvalue").innerHTML * 45.67 / 100);
+  var total = (totalqty + ((2.5/100)*(totalqty)) );
+  
+
+    document.getElementById('grandtotal').innerHTML = parseFloat(total.toPrecision(5));}
+
+    else if(prem.checked){
+    var totalqty = (document.getElementById("fruitqtyvalue").innerHTML * 45.67 / 100);
+    var total = (totalqty + ((4.3/100 )*(totalqty)) );
+     document.getElementById('grandtotal').innerHTML = parseFloat(total.toPrecision(5));}
+
+ var fish2 = document.getElementsByName("fishquality");
+
+  var fishslider = document.getElementById("fishqty").value;
+  document.getElementById("fishqtyvalue").innerHTML = fishslider;
+   var normal1 = document.getElementsByName("fishquality")[0];
+  var prem1 = document.getElementsByName("fishquality")[1];
+
+ if(normal1.checked){
+var totalqty1 = (document.getElementById("fishqtyvalue").innerHTML * 67.89 / 100);
+  var total1 = (totalqty1 + ((2.5/100)*(totalqty1)) );
+  
+    document.getElementById('grandtotal').innerHTML = parseFloat(total1.toPrecision(5));
+  } 
+  else if(prem1.checked){
+    var totalqty1 = (document.getElementById("fishqtyvalue").innerHTML * 67.89 / 100);
+    var total1 = (totalqty1 + ((4.3/100 )*(totalqty1)) );
+    
+    document.getElementById('grandtotal').innerHTML = parseFloat(total1.toPrecision(5));}
+
+
+ var vegetables2 = document.getElementsByName("vegetablesquality");
+  var vegslider = document.getElementById("vegetablesqty").value;
+  document.getElementById("vegetablesqtyvalue").innerHTML = vegslider;
+   var normal2 = document.getElementsByName("vegetablesquality")[0];
+  var prem2 = document.getElementsByName("vegetablesquality")[1];
+
+if(normal2.checked){
+  var totalqty2 = (document.getElementById("vegetablesqtyvalue").innerHTML * 79.33 / 100);
+  var total2 = (totalqty2 + ((2.5/100)*(totalqty2)) );
+  document.getElementById('grandtotal').innerHTML = parseFloat(total2.toPrecision(5));
+  } 
+  else if(prem2.checked){
+    var totalqty2 = (document.getElementById("vegetablesqtyvalue").innerHTML * 79.33 / 100);
+    var total2 = (totalqty2 + ((4.3/100 )*(totalqty2)) );
+   document.getElementById('grandtotal').innerHTML = parseFloat(total2.toPrecision(5));}
+
+   var meat2 = document.getElementsByName("meatquality");
+  var meatslider = document.getElementById("meatqty").value;
+  document.getElementById("meatqtyvalue").innerHTML = meatslider;
+   var normal3 = document.getElementsByName("meatquality")[0];
+  var prem3 = document.getElementsByName("meatquality")[1];
+
+  if(normal3.checked){
+  var totalqty3 = (document.getElementById("meatqtyvalue").innerHTML * 97.55 / 100);
+  var total3 = (totalqty3 + ((2.5/100)*(totalqty3)) );
+  document.getElementById('grandtotal').innerHTML = parseFloat(total3.toPrecision(5));
+  } 
+  else if (prem3.checked){
+    var totalqty3 = (document.getElementById("meatqtyvalue").innerHTML * 97.55 / 100);
+    var total3 = (totalqty3 + ((4.3/100 )*(totalqty3)) );
+    document.getElementById('grandtotal').innerHTML = parseFloat(total3.toPrecision(5));}
+
+
+ 
+
+   if(normal.checked && normal1.checked && normal2.checked && normal3.checked || prem.checked && prem1.checked && prem2.checked && prem3.checked){
+    var alltotal = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal.toPrecision(5));
+  }
+
+  else if(normal.checked && normal1.checked && normal2.checked && prem3.checked || normal.checked && normal1.checked && prem2.checked && normal3.checked){
+    var alltotal1 = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal1.toPrecision(5));
+  }
+
+  else if(normal.checked && prem1.checked && normal2.checked && prem3.checked || prem.checked && prem1.checked && prem2.checked && normal3.checked){
+    var alltotal2 = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal2.toPrecision(5));
+  }
+
+  else if(normal.checked && prem1.checked && prem2.checked && normal3.checked || prem.checked && normal1.checked && normal2.checked && prem3.checked){
+    var alltotal3 = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal3.toPrecision(5));
+  }
+
+  else if(prem.checked && normal1.checked && prem2.checked && prem3.checked || prem.checked && normal1.checked && normal2.checked && prem3.checked){
+    var alltotal4 = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal4.toPrecision(5));
+  }
+
+  else if(normal.checked && normal1.checked && prem2.checked && prem3.checked || prem.checked && prem1.checked && normal2.checked && normal3.checked){
+    var alltotal42 = (total + total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal1.toPrecision(5));
+  }
+
+
+  //normal & premium
+  else if(normal.checked && normal1.checked){
+    var alltotal5 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal5.toPrecision(5));
+  }
+
+  else if(prem.checked && prem1.checked){
+    var alltotal6 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal6.toPrecision(5));
+  }
+
+  else if(normal.checked && normal2.checked || prem.checked && prem2.checked){
+    var alltotal7 = (total + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal7.toPrecision(5));
+  }
+
+  else if(prem.checked && prem1.checked){
+    var alltotal8 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal8.toPrecision(5));
+  }
+
+  else if(normal.checked && normal3.checked){
+    var alltotal9 = (total + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal9.toPrecision(5));
+  }
+
+  else if(prem.checked && prem1.checked){
+    var alltotal10 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal10.toPrecision(5));
+  }
+  else if(normal2.checked && normal1.checked){
+    var alltotal11 = (total2 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal11.toPrecision(5));
+  }
+
+  else if(prem.checked && prem1.checked){
+    var alltotal12 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal12.toPrecision(5));
+  }
+  else if(normal2.checked && normal3.checked){
+    var alltotal13 = (total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal13.toPrecision(5));
+  }
+
+  else if(prem2.checked && prem3.checked){
+    var alltotal14 = (total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal14.toPrecision(5));
+  }
+
+  else if(normal3.checked && normal1.checked || prem3.checked && prem1.checked){
+    var alltotal15 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal15.toPrecision(5));
+  }
+
+  else if(prem3.checked && prem1.checked){
+    var alltotal16 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal16.toPrecision(5));
+  }
+
+  //choose premium and normal
+  else if(prem.checked && normal1.checked){
+    var alltotal17 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal17.toPrecision(5));
+  }
+
+  else if(normal.checked && prem1.checked){
+    var alltotal18 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal18.toPrecision(5));
+  }
+
+  else if(normal3.checked && normal1.checked){
+    var alltotal19 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal19.toPrecision(5));
+  }
+
+  else if(prem3.checked && prem1.checked){
+    var alltotal20 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal20.toPrecision(5));
+  }
+
+  else if(prem.checked && normal1.checked){
+    var alltotal21 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal21.toPrecision(5));
+  }
+
+  else if(normal.checked && prem1.checked){
+    var alltotal22 = (total + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal22.toPrecision(5));
+  }
+
+  else if(prem.checked && normal2.checked){
+    var alltotal23 = (total + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal23.toPrecision(5));
+  }
+
+  else if(normal.checked && prem2.checked){
+    var alltotal24 = (total + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal24.toPrecision(5));
+  }
+
+  else if(prem.checked && normal3.checked){
+    var alltotal25 = (total + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal25.toPrecision(5));
+  }
+
+  else if(normal.checked && prem3.checked){
+    var alltotal26 = (total + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal26.toPrecision(5));
+  }
+
+  else if(prem1.checked && normal2.checked){
+    var alltotal27 = (total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal27.toPrecision(5));
+  }
+
+  else if(normal1.checked && prem2.checked){
+    var alltotal28 = (total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal28.toPrecision(5));
+  }
+
+  else if(prem1.checked && normal3.checked){
+    var alltotal29 = (total1 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal29.toPrecision(5));
+  }
+
+  else if(normal1.checked && prem3.checked){
+    var alltotal30 = (total1 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal30.toPrecision(5));
+  }
+
+  else if(prem2.checked && normal1.checked){
+    var alltotal31 = (total2 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal31.toPrecision(5));
+  }
+
+  else if(normal2.checked && prem1.checked){
+    var alltotal32 = (total2 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal32.toPrecision(5));
+  }
+
+  else if(prem2.checked && normal3.checked){
+    var alltotal33 = (total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal33.toPrecision(5));
+  }
+
+  else if(normal2.checked && prem3.checked){
+    var alltotal34 = (total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal34.toPrecision(5));
+  }
+
+  else if(prem3.checked && normal1.checked){
+    var alltotal35 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal35.toPrecision(5));
+  }
+
+  else if(normal3.checked && prem1.checked){
+    var alltotal36 = (total3 + total1);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal36.toPrecision(5));
+  }
+
+  else if(prem3.checked && normal2.checked){
+    var alltotal37 = (total3 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal37.toPrecision(5));
+  }
+
+  else if(normal3.checked && prem2.checked){
+    var alltotal38 = (total3 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal38.toPrecision(5));
+  }
+
+
+  //normal & normal & normal
+  else if(normal.checked && normal1.checked && normal2.checked){
+    var alltotal39 = (total + total1 +total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal39.toPrecision(5));
+  }
+
+  else if(normal.checked && normal1.checked && normal3.checked){
+    var alltotal40 = (total + total1 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal40.toPrecision(5));
+  }
+
+  else if(normal.checked && normal2.checked && normal3.checked){
+    var alltotal41 = (total + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal41.toPrecision(5));
+  }
+
+  else if(normal1.checked && normal2.checked && normal3.checked){
+    var alltotal42 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal42.toPrecision(5));
+  }
+
+  //premium & premium & premium
+
+  else if(prem.checked && prem1.checked && prem2.checked){
+    var alltotal43 = (total + total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal43.toPrecision(5));
+  }
+
+  else if(prem.checked && prem1.checked && prem3.checked){
+    var alltotal45 = (total + total1 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal45.toPrecision(5));
+  }
+
+  else if(prem.checked && prem2.checked && prem3.checked){
+    var alltotal46 = (total + total2 +total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal46.toPrecision(5));
+  }
+
+  else if(prem1.checked && prem2.checked && prem3.checked){
+    var alltotal47 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal47.toPrecision(5));
+  }
+
+  //normal & premium & normal [0,1,2]
+  else if(normal.checked && prem1.checked && normal2.checked){
+    var alltotal48 = (total + total1 +total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal48.toPrecision(5));
+  }
+
+  //normal & normal & premium
+  else if(normal.checked && normal1.checked && prem2.checked){
+    var alltotal49 = (total + total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal49.toPrecision(5));
+  }
+
+  // premium & normal & premium
+  else if(prem.checked && normal1.checked && prem2.checked){
+    var alltotal50 = (total + total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal50.toPrecision(5));
+  }
+
+  //premium & normal & normal
+  else if(prem.checked && normal1.checked && normal2.checked){
+    var alltotal51 = (total + total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal51.toPrecision(5));
+  }
+
+  //premium & premium & normal
+  else if(prem.checked && prem1.checked && normal2.checked){
+    var alltotal52 = (total + total1 + total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal52.toPrecision(5));
+  }
+
+  //normal & normal & premium [0,2,3]
+  else if(normal.checked && normal2.checked && prem3.checked){
+    var alltotal53 = (total + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal53.toPrecision(5));
+  }
+
+  else if(normal.checked && prem2.checked && normal3.checked){
+    var alltotal54 = (total + total2 +total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal54.toPrecision(5));
+  }
+
+  else if(prem.checked && prem2.checked && normal3.checked){
+    var alltotal55 = (total + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal55.toPrecision(5));
+  }
+
+  else if(prem.checked && normal2.checked && normal3.checked){
+    var alltotal56 = (total + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal56.toPrecision(5));
+  }
+
+  else if(prem.checked && normal1.checked && normal2.checked){
+    var alltotal57 = (total + total1 +total2);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal57.toPrecision(5));
+  }
+
+  //normal & normal & premium [1,2,3]
+  else if(normal1.checked && normal2.checked && prem3.checked){
+    var alltotal58 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal58.toPrecision(5));
+  }
+
+  else if(normal1.checked && prem2.checked && normal3.checked){
+    var alltotal59 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal59.toPrecision(5));
+  }
+
+  else if(prem1.checked && prem2.checked && normal3.checked){
+    var alltotal60 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal60.toPrecision(5));
+  }
+
+  else if(prem1.checked && normal2.checked && normal3.checked){
+    var alltotal61 = (total1 + total2 + total3);
+    document.getElementById('grandtotal').innerHTML = parseFloat(alltotal61.toPrecision(5));
+  }
+
+
+     document.getElementById('grandtotal').style.display = 'block';
+
+     var checkBox = document.getElementsByName('items');
+
+     if (checkBox[0].checked){
+  
+  var saving = (5/100)*total ;
+
+  var point = 0;
+
+  document.getElementById('saving').innerHTML = parseFloat(saving.toPrecision(4));
+
+var fntotal = (total - saving);
+ document.getElementById('finaltotal').innerHTML = parseFloat(fntotal.toPrecision(5));
+
+ 
+
+var spent = fntotal;
+// start of calc
+ do{
+  point +=10;
+  spent -=100;
+ }while(spent>99);
+ //end of clac
+ document.getElementById('loyaltypoints').innerHTML = parseFloat(point.toPrecision(3));}
+
+ else if (checkBox[1].checked){
+
+var saving1 = (5/100)*total1 ;
+
+var point = 0;
+
+  document.getElementById('saving').innerHTML = parseFloat(saving1.toPrecision(4));
+
+var fntotal1 = (total1 - saving1);
+ document.getElementById('finaltotal').innerHTML = parseFloat(fntotal1.toPrecision(5));
+
+
+var spent1 = fntotal1;
+// start of calc
+ do{
+  point1 +=10;
+  spent1 -=100;
+ }while(spent1>99);
+ //end of clac
+
+
+ document.getElementById('loyaltypoints').innerHTML = parseFloat(point1.toPrecision(3));
+
+}
+
+
+ else if (checkBox[2].checked){
+
+var saving2 = (5/100)*total2 ;
+
+var point2 = 0;
+
+
+  document.getElementById('saving').innerHTML = parseFloat(saving2.toPrecision(4));
+
+var fntotal2 = (total2 - saving2);
+ document.getElementById('finaltotal').innerHTML = parseFloat(fntotal2.toPrecision(5));
+
+
+
+var spent2 = fntotal2;
+// start of calc
+ do{
+  point2 +=10;
+  spent2 -=100;
+ }while(spent2>99);
+ //end of clac
+document.getElementById('loyaltypoints').innerHTML = parseFloat(point2.toPrecision(3));
+}
+
+ else if (checkBox[3].checked){
+
+var saving3 = (5/100)*total3 ;
+
+var point3 = 0;
+ 
+
+  document.getElementById('saving').innerHTML = parseFloat(saving3.toPrecision(4));
+
+var fntotal3 = (total3 - saving3);
+ document.getElementById('finaltotal').innerHTML = parseFloat(fntotal3.toPrecision(5));
+
+ var spent3 = fntotal3;
+// start of calc
+ do{
+  point3 +=10;
+  spent3 -=100;
+ }while(spent3>99);
+ //end of clac
+
+ 
+ document.getElementById('loyaltypoints').innerHTML = parseFloat(point3.toPrecision(3));}
+
+
+
+
+  } else
+   {document.getElementsByClassName('memberonly')[0].style.display = 'none';
+  document.getElementsByClassName('memberonly')[1].style.display = 'none';
+  document.getElementsByClassName('memberonly')[2].style.display = 'none';
+  document.getElementsByClassName('memberonly')[3].style.display = 'none';
+  document.getElementsByClassName('memberonly')[4].style.display = 'none';
+  document.getElementsByClassName('memberonly')[5].style.display = 'none';
+ document.getElementById('grandtotal').style.display = 'none';}
+
+
+}
+
+ //write all the required functions here
+ //indentation is important
+ //also neatness
+
+// repitition is not in the syllabus. but students may use loop since  they learnt this concept in ITP
+//  you are expected to use since covered in the classes:
+// function with parameters
+// getElementsByName
+// getElementsById
+
+// additionally
+// getElementsByClassName
+</script>
+</body>
+</html>
